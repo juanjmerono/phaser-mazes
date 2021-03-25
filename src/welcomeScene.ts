@@ -11,9 +11,9 @@ export class WelcomeScene extends Phaser.Scene {
   }
 
   create(): void {
-    var titleText: string = "Starfall";
+    var titleText: string = "The Infinite Maze";
     this.title = this.add.text(150, 200, titleText,
-      { font: '128px Arial Bold', backgroundColor: '#FBFBAC', color: '#000' });
+      { font: '64px Arial Bold', backgroundColor: '#FBFBAC', color: '#000' });
 
     var hintText: string = "Click to start";
     this.hint = this.add.text(300, 350, hintText,
