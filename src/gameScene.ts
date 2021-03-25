@@ -20,10 +20,29 @@ export class GameScene extends Phaser.Scene {
   }
 
   preload(): void {
-      this.load.image("repeating-background", "./assets/dark.png");
+
   }
 
   create(): void {
+    var r1 = this.add.rectangle(200, 150, 148, 148, 0x6666ff);
+    var r2 = this.add.rectangle(400, 150, 148, 148, 0x9966ff).setStrokeStyle(4, 0xefc53f);
+
+    this.physics.add.existing(r1);
+    this.physics.add.existing(r2);
+
+    //r1.body.velocity.x = 100;
+    //r1.body.velocity.y = 100;
+    //r1.body.bounce.x = 1;
+    //r1.body.bounce.y = 1;
+    //r1.body.collideWorldBounds = true;
+
+    /*r2.body.velocity.x = -100;
+    r2.body.velocity.y = 100;
+    r2.body.gameObject.bounce.x = 1;
+    r2.body.gameObject.bounce.y = 1;
+    r2.body.gameObject.collideWorldBounds = true;*/
+
+    this.physics.add.collider(r1, r2);
     /*this.walls = this.physics.add.staticGroup({
       key: 'walls',
       frameQuantity: 20
