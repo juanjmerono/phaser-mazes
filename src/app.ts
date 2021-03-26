@@ -14,7 +14,7 @@ const config = {
     width: 800,
     height: 600
   },
-  scene: [WelcomeScene, GameScene, ScoreScene],
+  scene: [/*WelcomeScene, */GameScene, ScoreScene],
   physics: {
     default: "arcade",
     arcade: {
