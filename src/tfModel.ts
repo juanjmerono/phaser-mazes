@@ -1,4 +1,19 @@
+import * as tf from "@tensorflow/tfjs";
+
 export class TfModel {
+    model: any;
+    constructor() {
+        this.model = tf.sequential();
+        this.model.add(tf.layers.dense({
+            units: 8,
+            inputShape: [5],
+            activation: 'sigmoid'
+        }));
+        this.model.add(tf.layers.dense({
+            units: 2,
+            activation: 'softmax'
+        }));
+    }
 
     /*getModel(player,isNewModel): TfModel {
 

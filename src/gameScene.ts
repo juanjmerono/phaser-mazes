@@ -1,11 +1,13 @@
 import "phaser";
 import { Tilemaps } from "phaser";
 import { Maze,Cell } from "./mazeClass";
+import { TfModel } from "./tfModel";
 
 export class GameScene extends Phaser.Scene {
   walls: Phaser.Physics.Arcade.StaticGroup;
   info: Phaser.GameObjects.Text;
-  players: Phaser.Physics.Arcade.Group;
+  bots: Phaser.Physics.Arcade.Group;
+  player: Phaser.Physics.Arcade.Sprite;
   mazeWalls: Phaser.Physics.Arcade.StaticGroup;
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   score: number = 0;
@@ -38,17 +40,18 @@ export class GameScene extends Phaser.Scene {
     //  The platforms group contains the ground and the 2 ledges we can jump on
     this.mazeWalls = this.maze.draw();
 
-    this.players = this.addPlayers();
+    this.bots = this.addBots();
 
     // The player and its settings
-    //this.player = this.physics.add.sprite(20, 30, 'dude');
+    let rCell = this.maze.randomCell().inside();
+    this.player = this.physics.add.sprite(rCell.x, rCell.y, 'dude');
 
     //  Player physics properties. Give the little guy a slight bounce.
     //this.player.setBounce(0.2);
-    //this.player.setCollideWorldBounds(true);
+    this.player.setCollideWorldBounds(true);
 
     //  Our player animations, turning, walking left and walking right.
-    /*this.anims.create({
+    this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
         frameRate: 10,
@@ -66,7 +69,7 @@ export class GameScene extends Phaser.Scene {
         frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
         frameRate: 10,
         repeat: -1
-    });*/
+    });
 
     //  Input Events
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -79,17 +82,19 @@ export class GameScene extends Phaser.Scene {
 
 
     //  Collide the player and the stars with the platforms
-    this.physics.add.collider(this.players, this.mazeWalls);
+    this.physics.add.collider(this.bots, this.mazeWalls);
+    this.physics.add.collider(this.player, this.mazeWalls);
     this.physics.add.collider(this.star, this.mazeWalls);
 
     //  Checks to see if the player overlaps with any of the stars, if he does call the collectStar function
-    this.physics.add.overlap(this.players, this.star, this.starFound, null, this);
+    this.physics.add.overlap(this.bots, this.star, this.starFound, null, this);
+    this.physics.add.overlap(this.player, this.star, this.starFound, null, this);
 
     //this.physics.add.collider(this.player, this.bombs, this.hitBomb, null, this);
   }
   
   update(time: number): void {
-    /*if (this.cursors.left.isDown) {
+    if (this.cursors.left.isDown) {
         this.player.setVelocityX(-120);
         this.player.anims.play('left', true);
     } else if (this.cursors.right.isDown) {
@@ -105,7 +110,7 @@ export class GameScene extends Phaser.Scene {
         this.player.setVelocityY(300);
     }  else {
         this.player.setVelocityY(0);
-    }*/
+    }
   }
 
   starFound(): void {
@@ -113,16 +118,22 @@ export class GameScene extends Phaser.Scene {
     this.scene.start("ScoreScene",{ starsCaught: 10 });
   }
 
-  addPlayers(): Phaser.Physics.Arcade.Group {
-    let playerGrp = this.physics.add.group();
+  addBots(): Phaser.Physics.Arcade.Group {
+    let botGrp = this.physics.add.group();
+    botGrp.runChildUpdate = true;
     for (let i=0; i<2; i++) {
         let mazeCell = this.maze.randomCell().inside();
-        var player = playerGrp.create(mazeCell.x, mazeCell.y, 'dude');
-        //player.model = getModel(player,isNewModel);
-        player.setCollideWorldBounds(true);
-        //if (i==0) singlePlayer = player;
+        let bot = this.physics.add.sprite(mazeCell.x, mazeCell.y, 'dude');
+        botGrp.add(bot);//.create(mazeCell.x, mazeCell.y, 'dude');
+        //bot.model = new TfModel();
+        bot.update = function() {
+            //console.log('Update: ');
+            this.setVelocityX(120);
+            this.anims.play('right', true);
+        };
+        bot.setCollideWorldBounds(true);
     }
-    return playerGrp;
+    return botGrp;
   }
 
 };

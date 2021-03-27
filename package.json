@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/juanjmerono/phaser-mazes#readme",
   "devDependencies": {
+    "@tensorflow/tfjs": "^3.3.0",
     "live-server": "^1.2.1",
     "phaser": "^3.53.1",
     "ts-loader": "^8.0.18",
