@@ -25,7 +25,7 @@ export class ScoreScene extends Phaser.Scene {
       { font: '24px Arial Bold', backgroundColor: '#FBFBAC', color: '#000' });
 
     this.input.on('pointerdown', function (/*pointer*/) {
-      this.scene.start("WelcomeScene");
+      this.scene.start("GameScene");
     }, this);
   }
 };
